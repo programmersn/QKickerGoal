@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<sim-project version="7.7" multi-file="no">
+  <meta>
+    <name>GameFootPlus2D</name>
+    <authors>Nouaïm Souiki</authors>
+    <description>Projet de jeu de football en 2D, developpé en C++/Qt, reposant sur architecture à 3 couches API-Engine-Gameplay.
+Les règles du jeu sont à consulter dans le GDD.</description>
+  </meta>
+  <counters models="1">
+    <entity-names>
+      <counter>
+        <item-type stereotype="" type="UmlPackage" />
+        <value>3</value>
+      </counter>
+      <counter>
+        <item-type stereotype="" type="UmlClass" />
+        <value>3</value>
+      </counter>
+    </entity-names>
+    <entity-ids>
+      <counter>
+        <item-type stereotype="" type="AbstractElementGroup" />
+        <value>19</value>
+      </counter>
+      <counter>
+        <item-type stereotype="" type="UmlPackage" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type stereotype="" type="UmlContainment" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type stereotype="" type="UmlClass" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type stereotype="" type="UmlGeneralization" />
+        <value>2</value>
+      </counter>
+    </entity-ids>
+    <diagrams>
+      <counter>
+        <type>SoftwareIdeasModeler.Core.Diagrams.UmlDiagrams.UmlClassDiagram</type>
+        <value>1</value>
+      </counter>
+    </diagrams>
+    <fields />
+  </counters>
+  <management>
+    <persons>
+      <person id="P50ad90a297ab4a8aa003c371bd24729f">
+        <first-name />
+        <last-name />
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+      </person>
+    </persons>
+    <tasks />
+    <requirements />
+    <issues />
+    <to-dos />
+  </management>
+  <glossary />
+  <types>
+    <type-sets>
+      <type-set file="UmlTypes.xml" />
+    </type-sets>
+    <custom-types />
+  </types>
+  <filters />
+  <items />
+  <models>
+    <model id="p481369747115703949" name="Model 1" type="" namespace="" order-index="1">
+      <meta>
+        <authors>
+          <author> </author>
+        </authors>
+        <description />
+        <creation-date>11/06/2014 17:56:56</creation-date>
+        <change-date>01/01/0001 00:00:00</change-date>
+        <revision-count>0</revision-count>
+        <version />
+      </meta>
+      <abstract-items />
+      <sub-models />
+      <diagram type="uml-class" id="p460591085508342325" name="GlobalClassesDiagram" order-index="1" show-id="false" show-name="true" show-parent-name="false" show-stereotypes="true" show-tagged-values="false" show-template-parameters="true" show-fields="true" show-empty-compartments="true" show-attributes="true" show-attribute-visibility="true" show-operations="true" show-operation-parameters="true" show-operation-visibility="true" show-nullability="true" show-sequence-number="false" show-extension-points="true" show-relationship-texts="true" auto-routed-paths="false">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="solid" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>11/06/2014 17:56:56</creation-date>
+          <change-date>11/06/2014 18:10:49</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="di737373103281810452" cid="C001" type="class" name="Singleton" style-class="" is-abstract="false" is-root="false" is-leaf="false" is-active="false" creation-date="11/06/2014 18:07:04">
+            <stereotypes />
+            <documentation>
+              <text>
+                <styles>
+                  <style name="S1" font-name="Verdana" font-size="12" font-bold="false" font-italic="false" font-underline="false" font-strikeout="false">
+                    <text>
+                      <solid-brush color="#FF000000" />
+                    </text>
+                  </style>
+                </styles>
+                <content>
+                  <paragraph>
+                    <p s="S1">
+                      <t />
+                    </p>
+                  </paragraph>
+                </content>
+              </text>
+            </documentation>
+            <cooperation>
+              <participants />
+              <comments />
+            </cooperation>
+            <associated-diagrams />
+            <owned-items />
+            <style class="default" />
+            <attributes />
+            <operations />
+            <template-parameters>
+              <template-parameter id="" name="T" kind="" default-value="" />
+              <template-parameter id="" name="" kind="" default-value="" />
+              <source-codes>
+                <source-code language="ActionScript" />
+              </source-codes>
+            </template-parameters>
+          </item>
+          <item id="di826053037734238486" cid="GNR001" type="generalization" name="" style-class="" is-abstract="false" is-root="false" is-leaf="false" is-active="false" creator="P50ad90a297ab4a8aa003c371bd24729f" creation-date="11/06/2014 18:10:11">
+            <stereotypes />
+            <associated-diagrams />
+            <owned-items />
+            <style class="default" />
+          </item>
+          <item id="di973311295373087149" cid="C002" type="class" name="Kernel" style-class="" is-abstract="false" is-root="false" is-leaf="false" is-active="false" creator="P50ad90a297ab4a8aa003c371bd24729f" creation-date="11/06/2014 18:10:11">
+            <stereotypes />
+            <associated-diagrams />
+            <owned-items />
+            <style class="default" />
+            <attributes />
+            <operations />
+            <template-parameters>
+              <source-codes />
+            </template-parameters>
+          </item>
+          <item id="di482193298511923105" cid="C003" type="class" name="Subject" style-class="" is-abstract="false" is-root="false" is-leaf="false" is-active="false" creator="P50ad90a297ab4a8aa003c371bd24729f" creation-date="11/06/2014 18:10:49">
+            <stereotypes />
+            <associated-diagrams />
+            <owned-items />
+            <style class="default" />
+            <attributes />
+            <operations />
+            <template-parameters>
+              <source-codes />
+            </template-parameters>
+          </item>
+        </abstract-items>
+        <layer name="Default" visible="true" enabled="true" locked="false">
+          <item id="di737373103281810452" iid="f1b35738fdea4e658a8b04b594b6c170" creation-date="11/06/2014 18:07:04" order-index="0" type="entity">
+            <layout ax="354" ay="81" awidth="90" aheight="54" x="354" y="81" width="90" height="54" angle="0" />
+            <class />
+          </item>
+          <item id="di973311295373087149" iid="654aaba0947b4e74b44a8375deb4dd5c" creation-date="11/06/2014 18:10:11" order-index="1" type="entity">
+            <layout ax="324" ay="205" awidth="75" aheight="49" x="324" y="205" width="75" height="49" angle="0" />
+            <class />
+          </item>
+          <item id="di826053037734238486" iid="0a55f39217f4457c9015d67237f54418" creation-date="11/06/2014 18:10:11" order-index="2" type="relation">
+            <layout line-style="oblique" lock-start-point="false" lock-end-point="false" lock-to-fields="false" name-position="10,-10" auto-path="" x1="370" y1="205" x2="391" y2="135" start-border-pos="0.151939900716146" end-border-pos="0.647745937771267">
+              <points>
+                <point x="370" y="205" />
+                <point x="391" y="135" />
+              </points>
+            </layout>
+            <relation from="di973311295373087149" from-iid="654aaba0947b4e74b44a8375deb4dd5c" to="di737373103281810452" to-iid="f1b35738fdea4e658a8b04b594b6c170" />
+          </item>
+          <item id="di482193298511923105" iid="632a99a3f76a4b0694deaf947bfe588c" creation-date="11/06/2014 18:10:49" order-index="3" type="entity">
+            <layout ax="90" ay="12" awidth="140" aheight="160" x="90" y="12" width="140" height="160" angle="0" />
+            <class />
+          </item>
+        </layer>
+      </diagram>
+    </model>
+  </models>
+  <documents />
+  <document-templates />
+</sim-project>

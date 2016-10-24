@@ -1,0 +1,109 @@
+Spécification :
+****************
+
+Kernel :
+	- Objet observable
+	- Synchronise les différents engines
+	
+GameState :
+	-état courant
+	-construit sa propre scène de jeu (en ajoutant les entités qu'il veut)
+	-gère ses propres évènement (évènements qui ont été captés par sa propre scène), pour cela il doit garder une référence des entités qu'il a placé.
+		-- Parmi les evenements gérées : gère les focus sur les entités graphiques ajoutés qu'il a ajouté à sa scène.
+
+GraphicsEntity est définie par :
+	-Un ensemble de pixel (QPixmap) qu'on peut rajouter à une scène (QGraphcisItem) => QGraphicsPixmapItem,
+	-un état du jeu peut rajouter à sa propre scène,
+	-L'état courant l'agrège afin de l'ajouter à sa propre scène, et de pouvoir la modifier après, selon les besoins du gameplay.
+	
+MovableEntity est définie par :
+	-une entité graphique (héritage)
+	-possédant une position modifiable sur la scène (agrège un QPointF)
+	-doit connaître le terrain sur lequel il evolue (pour que sa capacité de se mouvoir respecte les contraintes de l'endroit ou elle se meut).
+	-possède une direction dans laquelle elle se meut.
+	-possède une accélération, (lorsquon appuye sur une direction + Shift)
+	-possède une décélération, (lorsqu'on relâche Shift).
+	
+Field :
+	- entité graphique simple, sans rien de plus (optionnellement : rajouter Mode climat : Day or Night).
+	- 
+
+Avatar : 
+	- MovableEntity,
+	- Focusable, ie peut recevoir les evenments utilisateurs.
+	* Comment un avatar set à quel position se placer sur le terrain :
+		-- Si son équipe possède le coup d'envoi, alors il est très proche de la balle
+			-- Si lui même possède le coup d'envoi, alors il est encore plus proche de la balle, et possède le focus
+		--Sinon il est très loin de  la ablle, dans sa motié de terrain.
+
+Ball :
+	- MovableEntity
+	- A ball entity can move only when it's colliding with an avatar, that's mean that only an avatar ca call this method
+	- La balle ne connait que le terrain sur lequel elle evolue, elle ne connait pas l'avatar qui la possede -> seul un avatar peut faire bouger la balle.
+	
+A priori, Ball et Avatar possèdent les mêmes propriétés de déplacement.
+
+Team :
+	-Strcuture composite
+	-composée de 2 avatars et un goalkeeper
+	-N'offre aucun servie, ce qui est logique puisqu'une équipe ne peut réaliser que ce que ses composants (ir: ses avatars) réalisent
+	--> Un objet team nous permet juste de regrouper les avatars dans une structure qui permettent d'y accéder rapidement.
+
+
+Conception :
+***********
+Changes occurred in the conception :
+-----------------------------------
+* Impelemnting the GraphicsEntity as subclasse of QGraphicsItem, such that the GraphihcsScene has got the list of entites (wich are QGItems) 
+	to the purpose of getting their positions.
+
+* Instantiating avatars in scene via current game state, as simply as possible.
+
+* Attaching a slot on QApplication::exec() which call Kernel::notify() at ich user's event handled by the loop(in the old implementation 
+	Kernel::notify() is called only when a state is changed, but we need this call everytime that the scene is changed, (ie after handling event by the scene).
+	
+	---> Nous avons connecté plutot le signal QGraphicsScene::changed(..) au slot Kernel::notify(), afin que chaque changement au niveau de la de scène 
+		soit renseigné au noyau via sa méthode notify(), qui va mettre à jour les moteurs de jeu.
+		 C'est ainsi que le moteur graphique peut suivre l'évolution de la scène et la dessiner.
+		 Afin de définir Kernel::notify() comme étant un slot, nous devons transformer Kernel en une extension de QObject.
+
+* Merging GraphicsEngine and GraphicsScene into one only GraphicsScene, which will inherit from QGraphicsScene, and agregate a QGraphicsView to draw and then visualize the scene.
+
+Reimplement Subject::ad(Observer*) as Kernel::add(Engine*), which is legal because Kernel inherit from Subject, and Engine from Observer.
+
+Les types STL ont été utilisé pour les classes génériques, pouvant servir pour un projet, et donc en utilisant une autre API.
+Les types Qt (encapsulant les types primitifs) ont été utilisées pour les classes spécifiquement créées pour les besoins du jeu.
+
+Une facon d'optimiser la rapidté de l'application est celle-ci : Les inline definitions  (cf [Garetta Cpp]),
+mais pour de raison de lisibilité du code, nous nous en sommes abstenus.
+
+Les classes encapsulations Qt des types C++ primitifs ont étté utilisées telles quelle dans l'implémenatation; nous n'avons pas voulu alourdir le code outre 
+mesure en encapsulant les types que l'API a déjà encapsulé (qreal, QPoint, QSize, ...).
+
+L'association GraphicsEntity-GraphicsScene permet de controler tout ce qu'un état rajoute dans sa propre scène. Un état ne peut ajouter à sa scène que des
+instance de GraphicsEntity : il n'a pas accès direct aux classes de l'API -encapsulation de données oblige.
+
+L'état en cours délégue la capture d'évnement à sa propre scène, qui utiliser uné réimplentation de la méthode Qt keyPressEvent() afin de capturer les evenements
+qu'elle recoit, qui à son tour va renvoyer à l'état en cours l'evènement qu'elle a capturée, car seu le currentGameState sait quoi faire à propos de cet evt.
+L'état courant du jeu ne doit pas se préoccuper des considérations techniques (relevant seulement de l'API) concernant le rajout d'une entité.
+
+Pixmaps des entités mouvantes :
+	Un problème (sur le plan de la rapidité d'exécution du jeu) est le chargement des données, en particulier celui des images servant de pixmpas
+	aux entités. Une solution a été d'attribuer, à chaque sous-classe de MovableEntitie, un dictionnaire statique qui stocke, pour toutes les instances de la
+	sous-classe en question, les pixmaps suceptibles de représenter l'entité mouvante au-cours du jeu.
+	Le dictionnaire a été impélmenté avec un QMap, type Qt optimisé pour stocker des paires <key,value> (ici les clés sont les noms des pixmaps, et les les valeurs
+	des pointeurs vers les pixmaps à charger).
+	Ainsi l'instanciation d'une sous-classe de MovableEntity chargeait, une fois pour toutes et pour toutes les isntances futurs de la classe, les pixmaps
+	utiles aux objets de la classe.
+	Prenons un exemple : L'état PlayingGameState construit sa scène graphique, et y instancie un premier avatar. Cet avatar va garnir une prmière fois le dictionnaire des pixmaps
+	avec les données qui lui correspondent (en effet il est logique que seul l'avatr soit au-courant des données qui lui vont) et mettre à vrai un booleen.
+	De cette facon tous les autres avatars instanciés ne rerempilront pas le dictionnaire dèja garni, et pourront, à, chaque instant, acéder au pointeurs
+	vers la pixmpas qui les interessent.
+	
+Gameplay :
+
+ La gestion globale du gameplay est délégué le kernel à l'état PlayingGameState, dès que ce dernier est instancié (ie dès que la prtie commence).
+ Cet état gère les evènements captés par sa scène :
+	- Traduit les entrées user par les actions spécifiques sur les avatars (ie : les footballers "focusable") et sur le déroulement de la partie 
+	(mise en pause, exit ...)
+	- Decide à quelle équipe il donne le coup d'envoi (soit arbitrairement, soit en se basant sur une simulation de lancer de pièce d'arbitre).
